@@ -14,7 +14,16 @@ jobs:
         with:
           persist-credentials: false
 
-      - run: git tag --points-at HEAD
+      # build docs
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@4.0.0
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages # The branch the action should deploy to.
+          folder: docs # The folder the action should deploy.
+          target-folder: docs/dev # the folder in gh-pages that will be created/cleaned
+          clean: true # Automatically remove deleted files from the deploy branch
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.0.0
@@ -24,16 +33,5 @@ jobs:
           folder: docs # The folder the action should deploy.
           target-folder: docs/latest # the folder in gh-pages that will be created/cleaned
           clean: true # Automatically remove deleted files from the deploy branch
-
-  build-and-deploy-release:
-    # this job doesn't actually "need" the other one
-    # but we will have a race condition if we don't wait for it to complete
-    needs: build-and-deploy
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2.3.1
-        with:
-          persist-credentials: false
 
       - run: git tag --points-at HEAD

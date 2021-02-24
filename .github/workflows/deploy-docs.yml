@@ -25,13 +25,19 @@ jobs:
           target-folder: docs/dev # the folder in gh-pages that will be created/cleaned
           clean: true # Automatically remove deleted files from the deploy branch
 
-      - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@4.0.0
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          branch: gh-pages # The branch the action should deploy to.
-          folder: docs # The folder the action should deploy.
-          target-folder: docs/latest # the folder in gh-pages that will be created/cleaned
-          clean: true # Automatically remove deleted files from the deploy branch
+      #- name: Deploy
+      #  uses: JamesIves/github-pages-deploy-action@4.0.0
+      #  with:
+      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #    branch: gh-pages # The branch the action should deploy to.
+      #    folder: docs # The folder the action should deploy.
+      #    target-folder: docs/latest # the folder in gh-pages that will be created/cleaned
+      #    clean: true # Automatically remove deleted files from the deploy branch
 
-      - run: git tag --points-at HEAD
+      - name: Find current tag
+        run: echo "tag=$(git tag --points-at HEAD)" >> $GITHUB_ENV
+
+        run: echo "${{ env.tag }}"
+
+      - if: ${{ startsWith(env.tag, 'v') }}
+        run: echo "VERSION!!!"

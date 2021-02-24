@@ -37,7 +37,7 @@ jobs:
       - name: Find current tag
         run: echo "tag=$(git tag --points-at HEAD)" >> $GITHUB_ENV
 
-        run: echo "${{ env.tag }}"
+      - run: echo "${{ env.tag }}"
 
       - if: ${{ startsWith(env.tag, 'v') }}
         run: echo "VERSION!!!"
